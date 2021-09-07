@@ -52,7 +52,9 @@ rev xs = revv xs []
 --- ### app
 
 -- don't forget to put the type declaration or you will lose points!
-app = undefined
+app :: [a] -> [a] -> [a]
+app [] ys = ys
+app (x:xs) (y:ys) = x:(xs ++ ys)
 
 --- ### inclist
 
@@ -135,7 +137,7 @@ union xs@(x:xt) ys@(y:yt) | x < y = x : union xt ys
 intersect :: Ord a => [a] -> [a] -> [a]
 intersect [] x = x
 intersect x [] = x
-intersect x y =  
+--intersect x y =  
 
 --- ### powerset
 
@@ -154,9 +156,9 @@ inclist' l = fmap (1+) l
 --- ### sumlist'
 
 -- don't forget to put the type declaration or you will lose points!
--- sumlist' :: [a] -> [a]
--- sumlist' l = fold (+) 0 l 
+sumlist' :: (Num a) => [a] -> a
+sumlist' l = fold (+) (0) (l) 
 
--- fold :: (a -> b -> b) -> b -> [a] -> b
--- fold _ v [] = v
--- fold f v (x:xs) = f x $ fold f v xs
+fold :: (a -> b -> b) -> b -> [a] -> b
+fold _ v [] = v
+fold f v (x:xs) = f x (fold f v xs)
