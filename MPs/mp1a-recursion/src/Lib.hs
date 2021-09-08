@@ -54,7 +54,8 @@ rev xs = revv xs []
 -- don't forget to put the type declaration or you will lose points!
 app :: [a] -> [a] -> [a]
 app [] ys = ys
-app (x:xs) (y:ys) = x:(app xs ys)
+app xs [] = xs
+app (x:xs) l@(y:ys) = x:(app xs l)
 
 --- ### inclist
 
@@ -145,8 +146,9 @@ intersect l@(x:xs) l1@(y:ys) | otherwise = x : (intersect xs ys)
 
 -- don't forget to put the type declaration or you will lose points!
 powerset :: Ord a => [a] -> [[a]]
-powerset [] = []
---powerset (x:xs) = 
+powerset [] = [[]]
+powerset l@(x:xs) = [x:ps | ps <- powerset xs] `app` powerset xs
+
 
 --- Higher Order Functions
 --- ----------------------

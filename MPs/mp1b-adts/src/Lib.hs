@@ -52,7 +52,10 @@ list2cons' l = foldr (Cons) Nil l
 
 --- ### BinTree
 
--- BinTree
+-- Node :: a -> BinTree a -> BinTree a -> BinTree a
+-- Leaf :: BinTree a
+
+data BinTree a = Node (BinTree a) (BinTree a) | Leaf BinTree a
 
 --- ### sumTree
 
