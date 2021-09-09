@@ -147,7 +147,8 @@ intersect l@(x:xs) l1@(y:ys) | otherwise = x : (intersect xs ys)
 -- don't forget to put the type declaration or you will lose points!
 powerset :: Ord a => [a] -> [[a]]
 powerset [] = [[]]
-powerset l@(x:xs) = [x:ps | ps <- powerset xs] `app` powerset xs
+powerset l@(x:xs) = [] : fold go [] l
+    where go x acc = [x] : fmap (x:) acc `app` acc
 
 
 --- Higher Order Functions
