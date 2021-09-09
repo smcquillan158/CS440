@@ -52,21 +52,32 @@ list2cons' l = foldr (Cons) Nil l
 
 --- ### BinTree
 
--- Node :: a -> BinTree a -> BinTree a -> BinTree a
--- Leaf :: BinTree a
+-- data Node :: a -> BinTree a -> BinTree a -> BinTree a
+-- data Leaf :: BinTree a
 
-data BinTree a = Node (BinTree a) (BinTree a) | Leaf BinTree a
+
+data BinTree a = Leaf 
+               | Node a (BinTree a) (BinTree a) deriving(Show)
 
 --- ### sumTree
 
 -- don't forget to put the type declaration or you will lose points!
-sumTree = undefined
+sumTree :: Num a => BinTree a -> a
+sumTree (Leaf) = 0
+sumTree (Node a l r) = a + (sumTree l) + (sumTree r)
 
 --- ### SimpVal
 
--- SimpVal
+data SimpVal = IntVal (Integer)
+               | BoolVal (Bool)
+               | StrVal (String)
+               | ExnVal (String)
+               deriving (Show)
+
 
 --- ### liftIntOp
 
 -- don't forget to put the type declaration or you will lose points!
-liftIntOp = undefined
+liftIntOp :: (Integer -> Integer -> Integer) -> SimpVal -> SimpVal -> SimpVal
+liftIntOp f (IntVal i1) (IntVal i2) = IntVal (f i1 i2)
+liftIntOp f _           _           = ExnVal "not an IntVal!"
