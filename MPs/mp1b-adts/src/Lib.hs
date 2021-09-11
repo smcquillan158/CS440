@@ -7,6 +7,8 @@
 module Lib where
 
 
+import Data.Choose
+
 --- Problems
 --- ========
 
