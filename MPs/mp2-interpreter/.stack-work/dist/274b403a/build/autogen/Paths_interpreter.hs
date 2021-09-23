@@ -29,12 +29,12 @@ version :: Version
 version = Version [0,3,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\mps\\mp2-interpreter\\.stack-work\\install\\90da2636\\bin"
-libdir     = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\mps\\mp2-interpreter\\.stack-work\\install\\90da2636\\lib\\x86_64-windows-ghc-8.10.4\\interpreter-0.3.0.0-3af5Jmi2dl81pFSphs9uEG"
-dynlibdir  = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\mps\\mp2-interpreter\\.stack-work\\install\\90da2636\\lib\\x86_64-windows-ghc-8.10.4"
-datadir    = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\mps\\mp2-interpreter\\.stack-work\\install\\90da2636\\share\\x86_64-windows-ghc-8.10.4\\interpreter-0.3.0.0"
-libexecdir = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\mps\\mp2-interpreter\\.stack-work\\install\\90da2636\\libexec\\x86_64-windows-ghc-8.10.4\\interpreter-0.3.0.0"
-sysconfdir = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\mps\\mp2-interpreter\\.stack-work\\install\\90da2636\\etc"
+bindir     = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\MPs\\mp2-interpreter\\.stack-work\\install\\90da2636\\bin"
+libdir     = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\MPs\\mp2-interpreter\\.stack-work\\install\\90da2636\\lib\\x86_64-windows-ghc-8.10.4\\interpreter-0.3.0.0-3af5Jmi2dl81pFSphs9uEG"
+dynlibdir  = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\MPs\\mp2-interpreter\\.stack-work\\install\\90da2636\\lib\\x86_64-windows-ghc-8.10.4"
+datadir    = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\MPs\\mp2-interpreter\\.stack-work\\install\\90da2636\\share\\x86_64-windows-ghc-8.10.4\\interpreter-0.3.0.0"
+libexecdir = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\MPs\\mp2-interpreter\\.stack-work\\install\\90da2636\\libexec\\x86_64-windows-ghc-8.10.4\\interpreter-0.3.0.0"
+sysconfdir = "C:\\Users\\Sean McQuillan\\Documents\\CS440f2021\\MPs\\mp2-interpreter\\.stack-work\\install\\90da2636\\etc"
 
 getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "interpreter_bindir") (\_ -> return bindir)

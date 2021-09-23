@@ -85,6 +85,7 @@ compOps = H.fromList [ ("<", (<))
 
 liftIntOp :: (Int -> Int -> Int) -> Val -> Val -> Val
 liftIntOp op (IntVal x) (IntVal y) = IntVal $ op x y
+--liftIntOp (div) (IntVal x) Int
 liftIntOp _ _ _ = ExnVal "Cannot lift"
 
 liftBoolOp :: (Bool -> Bool -> Bool) -> Val -> Val -> Val
@@ -114,25 +115,39 @@ eval (VarExp s) env = case H.lookup s env of
 
 --- ### Arithmetic
 
-eval (IntOpExp op e1 e2) env = case H.lookup op intOps of 
-    Just rat -> liftIntOp rat (eval e1 env) (eval e2 env)
-    Nothing -> ExnVal "exn"
+eval (IntOpExp op e1 e2) env | op == "/" && (e2 == (IntExp 0)) = ExnVal "Division by 0" 
+                             | otherwise = case H.lookup op intOps of  
+                                Just rat -> liftIntOp rat (eval e1 env) (eval e2 env)
+                                Nothing -> ExnVal "exn"
 
 --- ### Boolean and Comparison Operators
 
-eval (BoolOpExp op e1 e2) env = undefined
+eval (BoolOpExp op e1 e2) env = case H.lookup op boolOps of
+    Just rat -> liftBoolOp rat (eval e1 env) (eval e2 env)
+    Nothing -> ExnVal "exn"
 
-eval (CompOpExp op e1 e2) env = undefined
+eval (CompOpExp op e1 e2) env = case H.lookup op compOps of
+    Just rat -> liftCompOp rat (eval e1 env) (eval e2 env)
+    Nothing -> ExnVal "exn"
 
 --- ### If Expressions
 
-eval (IfExp e1 e2 e3) env = undefined
+eval (IfExp e1 e2 e3) env = case eval e1 env of
+    BoolVal i -> if i then (eval e2 env) else (eval e3 env)
+    _ -> ExnVal "Condition is not a Bool"
 
 --- ### Functions and Function Application
 
-eval (FunExp params body) env = undefined
+eval (FunExp params body) env = CloVal params body env
 
-eval (AppExp e1 args) env = undefined
+-- eval (AppExp e1 args) env = case eval e1 env of
+--     CloVal params body envt -> eval body (union envt (H.fromList (zip params (evalArgs args env))))
+    
+-- evalArgs args env = fmap (`eval` env) args
+    
+-- 
+--     CloVal xs body env1 -> eval body (H.fromList ((H.toList env1) ++ (zip args xs)))  
+                                     
 
 --- ### Let Expressions
 
