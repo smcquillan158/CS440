@@ -84,8 +84,8 @@ compOps = H.fromList [ ("<", (<))
 --- -----------------
 
 liftIntOp :: (Int -> Int -> Int) -> Val -> Val -> Val
-liftIntOp op (IntVal x) (IntVal y) = IntVal $ op x y
---liftIntOp (div) (IntVal x) Int
+liftIntOp (div) (IntVal x) (IntVal 0) = ExnVal "Division by 0"
+liftIntOp op (IntVal x) (IntVal y) = IntVal $ op x y 
 liftIntOp _ _ _ = ExnVal "Cannot lift"
 
 liftBoolOp :: (Bool -> Bool -> Bool) -> Val -> Val -> Val
@@ -115,8 +115,7 @@ eval (VarExp s) env = case H.lookup s env of
 
 --- ### Arithmetic
 
-eval (IntOpExp op e1 e2) env | op == "/" && (e2 == (IntExp 0)) = ExnVal "Division by 0" 
-                             | otherwise = case H.lookup op intOps of  
+eval (IntOpExp op e1 e2) env = case H.lookup op intOps of  
                                 Just rat -> liftIntOp rat (eval e1 env) (eval e2 env)
                                 Nothing -> ExnVal "exn"
 
@@ -140,11 +139,9 @@ eval (IfExp e1 e2 e3) env = case eval e1 env of
 
 eval (FunExp params body) env = CloVal params body env
 
--- eval (AppExp e1 args) env = case eval e1 env of
---     CloVal params body envt -> eval body (union envt (H.fromList (zip params (evalArgs args env))))
-    
--- evalArgs args env = fmap (`eval` env) args
-    
+eval (AppExp e1 args) env = case eval e1 env of
+    CloVal params fbody envt -> eval fbody (union envt (H.fromList (zip params (evalArgs args env))))
+   
 -- 
 --     CloVal xs body env1 -> eval body (H.fromList ((H.toList env1) ++ (zip args xs)))  
                                      
@@ -152,6 +149,9 @@ eval (FunExp params body) env = CloVal params body env
 --- ### Let Expressions
 
 eval (LetExp pairs body) env = undefined
+
+evalArgs :: [Exp] -> Env -> [Val]    
+evalArgs args env = fmap (`eval` env) args
 
 --- Statements
 --- ----------
