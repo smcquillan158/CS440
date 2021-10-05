@@ -58,20 +58,18 @@ ctorShow (AppExp f e)     = "AppExp (" ++ ctorShow f ++ ") (" ++ ctorShow e ++ "
 --- ### `factk :: Integer -> (Integer -> t) -> t`
 
 factk :: Integer -> (Integer -> t) -> t
-factk 0 id = id 1
-factk n id = factk (n-1) (\x -> id (n*x))
+factk 0 f = f 1
+factk n f = factk (n-1) (\x -> f (n*x))
 
 --- ### `evenoddk :: [Integer] -> (Integer -> t) -> (Integer -> t) -> t`
 
 evenoddk :: [Integer] -> (Integer -> t) -> (Integer -> t) -> t
-evenoddk l e o = acc l e o
-    where acc (x:xs) e' o' | even x = acc xs (\v -> e' (evenoddk xs )) 
--- evenoddk [] e o = []
--- evenoddk [x] e o | even e = e x
---                  | otherwise = o x
--- evenoddk (x:xs) e o = undefined                 
-
-
+evenoddk [] k _ = k 0
+evenoddk [x] ke ko | even x = evenoddk [] (\v -> ke (v+x)) (\v -> ke (v+x))
+                   | otherwise = evenoddk [] (\v -> ko (v+x)) (\v -> ko (v+x))
+evenoddk (x:xs) ke ko | even x = evenoddk xs (\v -> ke  (v + x)) ko 
+                      | otherwise = evenoddk xs ke (\v -> ko (v +x))  
+                
 --- Automated Translation
 --- ---------------------
 
@@ -81,7 +79,12 @@ gensym i = ("v" ++ show i, i + 1)
 --- ### Define `isSimple`
 
 isSimple :: Exp -> Bool
-isSimple = undefined
+isSimple exp = case exp of
+    (AppExp e e1) -> False
+    (IntExp a) -> True
+    (VarExp a) -> True
+    (IfExp e e1 e2) -> isSimple e && isSimple e1 && isSimple e2
+    (OpExp o e1 e2) -> isSimple e1 && isSimple e2
 
 --- ### Define `cpsExp` - Overview
 
