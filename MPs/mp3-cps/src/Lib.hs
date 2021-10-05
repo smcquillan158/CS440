@@ -64,10 +64,12 @@ factk n id = factk (n-1) (\x -> id (n*x))
 --- ### `evenoddk :: [Integer] -> (Integer -> t) -> (Integer -> t) -> t`
 
 evenoddk :: [Integer] -> (Integer -> t) -> (Integer -> t) -> t
-evenoddk [] e o = []
-evenoddk [x] e o | even e = e x
-                 | otherwise = o x
-evenoddk (x:xs) e o = undefined                 
+evenoddk l e o = acc l e o
+    where acc (x:xs) e' o' | even x = acc xs (\v -> e' (evenoddk xs )) 
+-- evenoddk [] e o = []
+-- evenoddk [x] e o | even e = e x
+--                  | otherwise = o x
+-- evenoddk (x:xs) e o = undefined                 
 
 
 --- Automated Translation
