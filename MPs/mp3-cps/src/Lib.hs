@@ -89,8 +89,14 @@ isSimple exp = case exp of
 --- ### Define `cpsExp` - Overview
 
 cpsExp :: Exp -> Exp -> Integer -> (Exp, Integer)
-cpsExp = undefined
-
+cpsExp (IntExp n) k i = (AppExp k (IntExp n), i)
+cpsExp (IfExp e1 e2 e3) k num
+    | isSimple e1 = (IfExp e1 (e4) (e5), num)
+    | otherwise = cpsExp e1 (LamExp v (IfExp (VarExp v) e4 e5)) n2
+    where
+        (v, n2) = gensym num
+        (e4, _) = cpsExp e2 k n2
+        (e5, _) = cpsExp e3 k n2
 --- #### Define `cpsExp` for Integer and Variable Expressions
 
 --- #### Define `cpsExp` for Application Expressions
