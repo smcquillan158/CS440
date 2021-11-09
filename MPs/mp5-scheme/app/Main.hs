@@ -27,7 +27,9 @@ repl env = do
         -- runExcept returns a value of type `Either Diagnostic (Val, Env)`
       case runExcept $ runStateT (eval expr) env of   -- Eval
         Left err -> print err
-        Right Void -> 
+        Right (Void, env') -> repl env'
+        Right (val , env') -> print val >> repl env'
+    --repl env' 
         -- TODO:
         -- Insert line here: If return value is void,
         --                    loop with new env without printing
@@ -35,7 +37,7 @@ repl env = do
         --
         -- The following line may be removed when you're done implementing
         --  the cases above:
-        _ -> print "Error in Main.hs: Finish implementing repl"
+        -- _ -> print "Error in Main.hs: Finish implementing repl"
   repl env                                            -- Loop with old env
 
 main :: IO ()

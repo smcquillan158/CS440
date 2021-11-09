@@ -64,12 +64,16 @@ eval :: Val -> EvalState Val
 
 -- Self-evaluating expressions
 -- TODO: What's self-evaluating?
-eval v@(Number _) = unimplemented "Evaluating numbers"
-eval v@(Boolean _) = unimplemented "Evaluating booleans"
+eval v@(Number _) = return v --"Evaluating numbers"
+eval v@(Boolean _) = return v --"Evaluating booleans"
 
 -- Symbol evaluates to the value bound to it
 -- TODO
-eval (Symbol sym) = unimplemented "Evaluating symbols"
+eval s@(Symbol sym) = do 
+  env <- get
+  case H.lookup sym env of 
+    Just v -> return v
+    Nothing -> throwError (UndefSymbolError sym)
 
 -- Function closure is also self-evaluating
 eval v@(Func _ _ _) = return v
@@ -117,6 +121,15 @@ eval expr@(Pair v1 v2) = case flattenList expr of
 
     -- cond
     -- TODO: Handle `cond` here. Use pattern matching to match the syntax
+    evalList [Symbol "cond", cond] = 
+      do condList <- getList cond
+         evalCond' condList
+      where
+        evalCond' (c:cs) = 
+          do (o, e) <- getListOf2 cond
+             case eval o of
+              Boolean True -> do val <- eval e
+                                 return val  
 
     -- let
     -- TODO: Handle `let` here. Use pattern matching to match the syntax
@@ -135,6 +148,11 @@ eval expr@(Pair v1 v2) = case flattenList expr of
     -- define variable
     -- TODO: Handle `define` for variables here. Use pattern matching
     -- to match the syntax
+    evalList [Symbol "define", Symbol var, val] =
+      do env <- get
+         val <- eval val
+         modify $ H.insert var val
+         return Void
 
     -- define-macro
     -- TODO: Handle `define-macro` here. Use pattern matching to match
@@ -155,6 +173,14 @@ apply :: Val -> [Val] -> EvalState Val
   -- Function
     -- TODO: implement function application
     -- Use do-notation!
+apply (Func xs v env) args =
+  do argVals <- mapM eval args
+     env1 <- get
+     modify $ H.union env
+     modify $ H.union (H.fromList (zip xs argVals))
+     evalBody <- eval v
+     put env1
+     return evalBody 
 
   -- Macro
     -- TODO: implement macro evaluation
