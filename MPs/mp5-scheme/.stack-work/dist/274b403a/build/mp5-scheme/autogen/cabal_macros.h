@@ -155,7 +155,7 @@
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "mp5-scheme-0.2.0.0-IccltL3lqEI6EC8xIYjbTA-mp5-scheme"
+#define CURRENT_COMPONENT_ID "mp5-scheme-0.2.0.0-Jvw7Eo5FQXWLbXbFzgwusx-mp5-scheme"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.2.0.0"

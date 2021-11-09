@@ -64,12 +64,16 @@ eval :: Val -> EvalState Val
 
 -- Self-evaluating expressions
 -- TODO: What's self-evaluating?
-eval v@(Number _) = unimplemented "Evaluating numbers"
-eval v@(Boolean _) = unimplemented "Evaluating booleans"
+eval v@(Number _) = return v 
+eval v@(Boolean _) = return v 
 
 -- Symbol evaluates to the value bound to it
 -- TODO
-eval (Symbol sym) = unimplemented "Evaluating symbols"
+eval (Symbol sym) = do 
+  env <- get
+  case H.lookup sym env of 
+    Just v -> return v
+    Nothing -> throwError (UndefSymbolError sym)
 
 -- Function closure is also self-evaluating
 eval v@(Func _ _ _) = return v

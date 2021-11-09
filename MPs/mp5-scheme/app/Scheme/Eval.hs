@@ -63,7 +63,6 @@ keywords = [ "define"
 eval :: Val -> EvalState Val
 
 -- Self-evaluating expressions
--- TODO: What's self-evaluating?
 eval v@(Number _) = return v --"Evaluating numbers"
 eval v@(Boolean _) = return v --"Evaluating booleans"
 
@@ -121,21 +120,22 @@ eval expr@(Pair v1 v2) = case flattenList expr of
 
     -- cond
     -- TODO: Handle `cond` here. Use pattern matching to match the syntax
-    evalList [Symbol "cond", cond] = 
-      do condList <- getList cond
-         evalCond' condList
-      where
-        evalCond' (c:cs) = 
-          do (o, e) <- getListOf2 cond
-             case eval o of
-              Boolean True -> do val <- eval e
-                                 return val  
+    -- evalList [Symbol "cond", cond] = 
+    --   do condList <- getList cond
+    --      evalCond' condList
+      -- where
+      --   evalCond' (c:cs) = 
+      --     do (o, e) <- getListOf2 cond
+      --        case eval o of
+      --         Boolean True -> do val <- eval e
+      --                            return val  
 
     -- let
     -- TODO: Handle `let` here. Use pattern matching to match the syntax
 
     -- lambda
     -- TODO: Handle `lambda` here. Use pattern matching to match the syntax
+    --evalList [Symbol "lambda" ]
 
     -- define function
     evalList [Symbol "define", Pair (Symbol fname) args, body] =

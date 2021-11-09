@@ -198,5 +198,5 @@ runtime = H.fromList [ ("+", liftIntVargOp (+) 0)
                      , ("pair?", PrimFunc isPair)
                      , ("number?", PrimFunc isNumber)
                      , ("null?", PrimFunc isNull)
-                     , ("boolean?", Primfunc isBoolean)
+                     , ("boolean?", PrimFunc isBoolean)
                      ]
