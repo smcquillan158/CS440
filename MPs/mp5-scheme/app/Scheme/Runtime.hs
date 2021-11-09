@@ -194,5 +194,9 @@ runtime = H.fromList [ ("+", liftIntVargOp (+) 0)
                      , ("list", PrimFunc list)
                      , ("append", PrimFunc append)
                      , ("symbol?", PrimFunc isSymbol)
-                     -- TODO: Insert more runtime bindings here
+                     , ("list?", PrimFunc isList)
+                     , ("pair?", PrimFunc isPair)
+                     , ("number?", PrimFunc isNumber)
+                     , ("null?", PrimFunc isNull)
+                     , ("boolean?", Primfunc isBoolean)
                      ]
